@@ -103,6 +103,9 @@ public class SecurityConfig {
                 "/swagger-resources/**",
                 "/webjars/**",
 
+                // h2-console 확인
+                "/h2-console/**",
+
                 // 항상 모든 HTTP 메소드에 대해 인증 없이 접근 가능한 경로
                 "/notice",
                 "/recruits/recent3",

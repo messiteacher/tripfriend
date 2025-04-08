@@ -92,16 +92,14 @@ public class TripInformationService {
         // 장소 검증
         Place place = getPlcae(reqDto);
 
-        TripInformation information = TripInformation.builder()
-                .place(place)
-                .visitTime(reqDto.getVisitTime())
-                .duration(reqDto.getDuration())
-                .transportation(reqDto.getTransportation())
-                .cost(reqDto.getCost())
-                .notes(reqDto.getNotes())
-                //.priority(reqDto.getPriority())
-                .build();
+        TripInformation information = new TripInformation();
         information.setTripSchedule(schedule);
+        information.setPlace(place);
+        information.setVisitTime(reqDto.getVisitTime());
+        information.setDuration(reqDto.getDuration());
+        information.setCost(reqDto.getCost());
+        information.setNotes(reqDto.getNotes());
+        information.setTransportation(reqDto.getTransportation());
         tripInformationRepository.save(information);
         return new TripInformationResDto(information);
     }
@@ -123,16 +121,17 @@ public class TripInformationService {
                     Place place = getPlcae(infoReq);
 
                     // 객체 생성 및 저장
-                    return TripInformation.builder()
-                            .tripSchedule(schedule)
-                            .place(place)
-                            .visitTime(infoReq.getVisitTime())
-                            .duration(infoReq.getDuration())
-                            .transportation(infoReq.getTransportation())
-                            .cost(infoReq.getCost())
-                            .notes(infoReq.getNotes())
-                            //.priority(infoReq.getPriority())
-                            .build();
+                    TripInformation tripInformation = new TripInformation();
+                    tripInformation.setTripSchedule(schedule);
+                    tripInformation.setPlace(place);
+                    tripInformation.setVisitTime(infoReq.getVisitTime());
+                    tripInformation.setDuration(infoReq.getDuration());
+                    tripInformation.setTransportation(infoReq.getTransportation());
+                    tripInformation.setCost(infoReq.getCost());
+                    tripInformation.setNotes(infoReq.getNotes());
+
+                    return tripInformation;
+
                 }).collect(Collectors.toList());
 
         // 생성된 TripInformation 목록 저장

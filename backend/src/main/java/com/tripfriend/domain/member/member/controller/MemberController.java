@@ -55,8 +55,6 @@ public class MemberController {
         return new RsData<>("201-1", "회원가입이 완료되었습니다.", savedMember);
     }
 
-
-
     @Operation(summary = "로그인")
     @PostMapping("/login")
     public RsData<AuthResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
@@ -76,6 +74,7 @@ public class MemberController {
     @Operation(summary = "액세스 토큰 재발급")
     @PostMapping("/refresh")
     public RsData<AuthResponseDto> refresh(@CookieValue(name = "accessToken", required = false) String accessToken, HttpServletResponse response) {
+
         try {
             if (accessToken == null) {
                 return new RsData<>("401-2", "액세스 토큰이 없습니다.", null);

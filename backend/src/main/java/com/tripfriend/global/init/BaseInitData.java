@@ -2,7 +2,10 @@ package com.tripfriend.global.init;
 
 import com.tripfriend.domain.blacklist.entity.Blacklist;
 import com.tripfriend.domain.blacklist.repository.BlacklistRepository;
-import com.tripfriend.domain.member.member.entity.*;
+import com.tripfriend.domain.member.member.entity.AgeRange;
+import com.tripfriend.domain.member.member.entity.Gender;
+import com.tripfriend.domain.member.member.entity.Member;
+import com.tripfriend.domain.member.member.entity.TravelStyle;
 import com.tripfriend.domain.member.member.repository.MemberRepository;
 import com.tripfriend.domain.notice.entity.Notice;
 import com.tripfriend.domain.notice.repository.NoticeRepository;
@@ -17,6 +20,8 @@ import com.tripfriend.domain.recruit.apply.entity.Apply;
 import com.tripfriend.domain.recruit.apply.repository.ApplyRepository;
 import com.tripfriend.domain.recruit.recruit.entity.Recruit;
 import com.tripfriend.domain.recruit.recruit.repository.RecruitRepository;
+import com.tripfriend.domain.review.entity.Comment;
+import com.tripfriend.domain.review.entity.Review;
 import com.tripfriend.domain.review.repository.CommentRepository;
 import com.tripfriend.domain.review.repository.ReviewRepository;
 import com.tripfriend.domain.trip.information.entity.Transportation;
@@ -24,11 +29,7 @@ import com.tripfriend.domain.trip.information.entity.TripInformation;
 import com.tripfriend.domain.trip.information.repository.TripInformationRepository;
 import com.tripfriend.domain.trip.schedule.entity.TripSchedule;
 import com.tripfriend.domain.trip.schedule.repository.TripScheduleRepository;
-import com.tripfriend.domain.trip.schedule.service.TripScheduleService;
-import com.tripfriend.domain.review.entity.Review;
-import com.tripfriend.domain.review.entity.Comment;
 import com.tripfriend.global.exception.ServiceException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -77,68 +79,73 @@ public class BaseInitData implements CommandLineRunner {
     // 회원 등록
     private void initMembers() {
         if (memberRepository.count() == 0) {
-            Member user1 = Member.builder()
-                    .username("user1")
-                    .email("user1@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("user1")
-                    .gender(Gender.MALE)
-                    .ageRange(AgeRange.TWENTIES)
-                    .travelStyle(TravelStyle.TOURISM)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("USER")
-                    .verified(true)
-                    .build();
+
+            Member user1 = new Member();
+
+            user1.setUsername("user1");
+            user1.setEmail("user1@example.com");
+            user1.setPassword(passwordEncoder.encode("12341234"));
+            user1.setNickname("user1");
+            user1.setGender(Gender.MALE);
+            user1.setAgeRange(AgeRange.TWENTIES);
+            user1.setTravelStyle(TravelStyle.TOURISM);
+            user1.setAboutMe("hello");
+            user1.setRating(0.0);
+            user1.setAuthority("USER");
+            user1.setVerified(true);
+
             memberRepository.save(user1);
 
-            Member user2 = Member.builder()
-                    .username("user2")
-                    .email("user2@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("user2")
-                    .gender(Gender.FEMALE)
-                    .ageRange(AgeRange.THIRTIES)
-                    .travelStyle(TravelStyle.SHOPPING)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("USER")
-                    .verified(true)
-                    .build();
+            Member user2 = new Member();
+
+            user2.setUsername("user2");
+            user2.setEmail("user2@example.com");
+            user2.setPassword(passwordEncoder.encode("12341234"));
+            user2.setNickname("user2");
+            user2.setGender(Gender.FEMALE);
+            user2.setAgeRange(AgeRange.THIRTIES);
+            user2.setTravelStyle(TravelStyle.SHOPPING);
+            user2.setAboutMe("hello");
+            user2.setRating(0.0);
+            user2.setAuthority("USER");
+            user2.setVerified(true);
+
             memberRepository.save(user2);
 
-            Member user3 = Member.builder()
-                    .username("user3")
-                    .email("user3@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("user3")
-                    .gender(Gender.MALE)
-                    .ageRange(AgeRange.FORTIES_PLUS)
-                    .travelStyle(TravelStyle.RELAXATION)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("USER")
-                    .verified(true)
-                    .build();
+            Member user3 = new Member();
+
+            user3.setUsername("user3");
+            user3.setEmail("user3@example.com");
+            user3.setPassword(passwordEncoder.encode("12341234"));
+            user3.setNickname("user3");
+            user3.setGender(Gender.MALE);
+            user3.setAgeRange(AgeRange.FORTIES_PLUS);
+            user3.setTravelStyle(TravelStyle.RELAXATION);
+            user3.setAboutMe("hello");
+            user3.setRating(0.0);
+            user3.setAuthority("USER");
+            user3.setVerified(true);
+
             memberRepository.save(user3);
 
-            Member admin = Member.builder()
-                    .username("admin")
-                    .email("admin@example.com")
-                    .password(passwordEncoder.encode("12341234"))
-                    .nickname("admin")
-                    .gender(Gender.FEMALE)
-                    .ageRange(AgeRange.THIRTIES)
-                    .travelStyle(TravelStyle.SHOPPING)
-                    .aboutMe("hello")
-                    .rating(0.0)
-                    .authority("ADMIN")
-                    .verified(true)
-                    .build();
+            Member admin = new Member();
+
+            admin.setUsername("admin");
+            admin.setEmail("admin@example.com");
+            admin.setPassword(passwordEncoder.encode("12341234"));
+            admin.setNickname("admin");
+            admin.setGender(Gender.FEMALE);
+            admin.setAgeRange(AgeRange.THIRTIES);
+            admin.setTravelStyle(TravelStyle.SHOPPING);
+            admin.setAboutMe("hello");
+            admin.setRating(0.0);
+            admin.setAuthority("ADMIN");
+            admin.setVerified(true);
+
             memberRepository.save(admin);
 
             System.out.println("회원 테스트 데이터가 등록되었습니다.");
-        }else {
+        } else {
             System.out.println("이미 회원 데이터가 존재합니다.");
         }
     }
@@ -154,65 +161,176 @@ public class BaseInitData implements CommandLineRunner {
             }
 
             List<Recruit> recruits = List.of(
-                    Recruit.builder().member(members.get(0)).place(places.get(0))
-                            .title("서울 한강에서 피크닉 함께해요!").content("한강에서 맛있는 음식과 함께 피크닉 즐길 분 모집합니다.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(3)).endDate(LocalDate.now().plusDays(3))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION)
-                            .sameGender(false).sameAge(false).budget(20000).groupSize(4).build(),
+                    new Recruit(
+                            null,
+                            members.get(0),
+                            new ArrayList<>(),
+                            places.get(0),
+                            "서울 한강에서 피크닉 함께해요!",
+                            "한강에서 맛있는 음식과 함께 피크닉 즐길 분 모집합니다.",
+                            false,
+                            LocalDate.now().plusDays(3),
+                            LocalDate.now().plusDays(3),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(1))
-                            .title("부산 바다 여행! 해운대, 광안리 방문 예정").content("바다 여행을 좋아하시는 분과 함께하면 좋겠어요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(5)).endDate(LocalDate.now().plusDays(8))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE)
-                            .sameGender(true).sameAge(true).budget(50000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION,
+                            false,
+                            false,
+                            20000,
+                            4
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(1),
+                            "부산 바다 여행! 해운대, 광안리 방문 예정",
+                            "바다 여행을 좋아하시는 분과 함께하면 좋겠어요!",
+                            false,
+                            LocalDate.now().plusDays(5),
+                            LocalDate.now().plusDays(8),
 
-                    Recruit.builder().member(members.get(2)).place(places.get(3))
-                            .title("강릉 커피 투어 동행 모집").content("강릉의 유명한 커피 명소를 함께 방문할 동행을 찾습니다.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(7)).endDate(LocalDate.now().plusDays(10))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET)
-                            .sameGender(false).sameAge(false).budget(30000).groupSize(2).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE,
+                            true,
+                            true,
+                            50000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(2),
+                            new ArrayList<>(),
+                            places.get(3),
+                            "강릉 커피 투어 동행 모집",
+                            "강릉의 유명한 커피 명소를 함께 방문할 동행을 찾습니다.",
+                            false,
+                            LocalDate.now().plusDays(7),
+                            LocalDate.now().plusDays(10),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(5))
-                            .title("서울 도심 야경 투어").content("남산, 한강, 롯데타워 전망대 등을 함께 돌면서 야경을 감상해요.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(2)).endDate(LocalDate.now().plusDays(2))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION)
-                            .sameGender(true).sameAge(true).budget(25000).groupSize(5).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET,
+                            false,
+                            false,
+                            30000,
+                            2
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(5),
+                            "서울 도심 야경 투어",
+                            "남산, 한강, 롯데타워 전망대 등을 함께 돌면서 야경을 감상해요.",
+                            false,
+                            LocalDate.now().plusDays(2),
+                            LocalDate.now().plusDays(2),
 
-                    Recruit.builder().member(members.get(0)).place(places.get(8))
-                            .title("제주도 성산일출봉 트레킹").content("이른 아침 일출을 보러 함께 가실 분 구해요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(10)).endDate(LocalDate.now().plusDays(12))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE)
-                            .sameGender(false).sameAge(true).budget(60000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION,
+                            true,
+                            true,
+                            25000,
+                            5
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(0),
+                            new ArrayList<>(),
+                            places.get(8),
+                            "제주도 성산일출봉 트레킹",
+                            "이른 아침 일출을 보러 함께 가실 분 구해요!",
+                            false,
+                            LocalDate.now().plusDays(10),
+                            LocalDate.now().plusDays(12),
 
-                    Recruit.builder().member(members.get(2)).place(places.get(10))
-                            .title("속초 중앙시장 & 바닷가 투어").content("속초에서 맛집 탐방과 바닷가 드라이브 할 분!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(4)).endDate(LocalDate.now().plusDays(6))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET)
-                            .sameGender(true).sameAge(false).budget(40000).groupSize(4).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.ADVENTURE,
+                            false,
+                            true,
+                            60000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(2),
+                            new ArrayList<>(),
+                            places.get(10),
+                            "속초 중앙시장 & 바닷가 투어",
+                            "속초에서 맛집 탐방과 바닷가 드라이브 할 분!",
+                            false,
+                            LocalDate.now().plusDays(4),
+                            LocalDate.now().plusDays(6),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(12))
-                            .title("설악산 단풍 여행 같이 가요!").content("가을 단풍을 보며 힐링할 분 찾습니다.")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(15)).endDate(LocalDate.now().plusDays(17))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION)
-                            .sameGender(false).sameAge(false).budget(50000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET,
+                            true,
+                            false,
+                            40000,
+                            4
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(12),
+                            "설악산 단풍 여행 같이 가요!",
+                            "가을 단풍을 보며 힐링할 분 찾습니다.",
+                            false,
+                            LocalDate.now().plusDays(15),
+                            LocalDate.now().plusDays(17),
 
-                    Recruit.builder().member(members.get(0)).place(places.get(13))
-                            .title("강릉 바다 드라이브 & 맛집 투어").content("바다 드라이브와 유명 맛집 코스를 함께할 분!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(6)).endDate(LocalDate.now().plusDays(9))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET)
-                            .sameGender(false).sameAge(false).budget(70000).groupSize(5).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.RELAXATION,
+                            false,
+                            false,
+                            50000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(0),
+                            new ArrayList<>(),
+                            places.get(13),
+                            "강릉 바다 드라이브 & 맛집 투어",
+                            "바다 드라이브와 유명 맛집 코스를 함께할 분!",
+                            false,
+                            LocalDate.now().plusDays(6),
+                            LocalDate.now().plusDays(9),
 
-                    Recruit.builder().member(members.get(2)).place(places.get(9))
-                            .title("부산 감천마을 & 국제시장 투어").content("부산 여행을 알차게 즐길 분 구해요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(8)).endDate(LocalDate.now().plusDays(10))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SHOPPING)
-                            .sameGender(true).sameAge(false).budget(35000).groupSize(3).build(),
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.GOURMET,
+                            false,
+                            false,
+                            70000,
+                            5
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(2),
+                            new ArrayList<>(),
+                            places.get(9),
+                            "부산 감천마을 & 국제시장 투어",
+                            "부산 여행을 알차게 즐길 분 구해요!",
+                            false,
+                            LocalDate.now().plusDays(8),
+                            LocalDate.now().plusDays(10),
 
-                    Recruit.builder().member(members.get(1)).place(places.get(7))
-                            .title("경주 문화유산 탐방").content("불국사, 석굴암 등 문화유적지를 돌면서 역사 탐방해요!")
-                            .isClosed(false).startDate(LocalDate.now().plusDays(12)).endDate(LocalDate.now().plusDays(15))
-                            .travelStyle(com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SIGHTSEEING)
-                            .sameGender(false).sameAge(true).budget(45000).groupSize(4).build()
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SHOPPING,
+                            true,
+                            false,
+                            35000,
+                            3
+                    ),
+                    new Recruit(
+                            null,
+                            members.get(1),
+                            new ArrayList<>(),
+                            places.get(7),
+                            "경주 문화유산 탐방",
+                            "불국사, 석굴암 등 문화유적지를 돌면서 역사 탐방해요!",
+                            false,
+                            LocalDate.now().plusDays(12),
+                            LocalDate.now().plusDays(15),
+
+                            com.tripfriend.domain.recruit.recruit.entity.TravelStyle.SIGHTSEEING,
+                            false,
+                            true,
+                            45000,
+                            4
+                    )
             );
 
             recruitRepository.saveAll(recruits);
@@ -233,17 +351,18 @@ public class BaseInitData implements CommandLineRunner {
             }
 
             List<Apply> applies = List.of(
-                    Apply.builder().content("한강 피크닉 너무 좋아요! 같이 해요.").member(members.get(2)).recruit(recruits.get(0)).build(),
-                    Apply.builder().content("부산 바다 진짜 가고 싶었는데 함께해요!").member(members.get(0)).recruit(recruits.get(1)).build(),
-                    Apply.builder().content("강릉 커피 투어 너무 흥미로워요!").member(members.get(1)).recruit(recruits.get(2)).build(),
-                    Apply.builder().content("서울 야경 투어 같이 하고 싶어요!").member(members.get(0)).recruit(recruits.get(3)).build(),
-                    Apply.builder().content("제주도 일출 보러 가는 거 기대돼요!").member(members.get(2)).recruit(recruits.get(4)).build(),
-                    Apply.builder().content("속초 여행 너무 재밌겠어요!").member(members.get(1)).recruit(recruits.get(5)).build(),
-                    Apply.builder().content("설악산 단풍 너무 기대돼요!").member(members.get(0)).recruit(recruits.get(6)).build(),
-                    Apply.builder().content("강릉 바다 드라이브 코스 완전 좋아요!").member(members.get(2)).recruit(recruits.get(7)).build(),
-                    Apply.builder().content("부산 감천마을 너무 가고 싶었어요!").member(members.get(0)).recruit(recruits.get(8)).build(),
-                    Apply.builder().content("경주 역사 탐방 너무 흥미로워요!").member(members.get(1)).recruit(recruits.get(9)).build()
+                    new Apply(null, members.get(2), recruits.get(0), "한강 피크닉 너무 좋아요! 같이 해요."),
+                    new Apply(null, members.get(0), recruits.get(1), "부산 바다 진짜 가고 싶었는데 함께해요!"),
+                    new Apply(null, members.get(1), recruits.get(2), "강릉 커피 투어 너무 흥미로워요!"),
+                    new Apply(null, members.get(0), recruits.get(3), "서울 야경 투어 같이 하고 싶어요!"),
+                    new Apply(null, members.get(2), recruits.get(4), "제주도 일출 보러 가는 거 기대돼요!"),
+                    new Apply(null, members.get(1), recruits.get(5), "속초 여행 너무 재밌겠어요!"),
+                    new Apply(null, members.get(0), recruits.get(6), "설악산 단풍 너무 기대돼요!"),
+                    new Apply(null, members.get(2), recruits.get(7), "강릉 바다 드라이브 코스 완전 좋아요!"),
+                    new Apply(null, members.get(0), recruits.get(8), "부산 감천마을 너무 가고 싶었어요!"),
+                    new Apply(null, members.get(1), recruits.get(9), "경주 역사 탐방 너무 흥미로워요!")
             );
+
 
             applyRepository.saveAll(applies);
             System.out.println("동행 요청(댓글) 20개가 등록되었습니다.");
@@ -253,117 +372,126 @@ public class BaseInitData implements CommandLineRunner {
     }
 
 
-
     // 여행지 등록
     private void initPlace() {
         if (placeRepository.count() == 0) {
-            List<Place> places = List.of(
-                    // 서울
-                    Place.builder()
-                            .cityName("서울")
-                            .placeName("경복궁")
-                            .description("조선 시대의 대표적인 궁궐로, 한국 전통 건축의 아름다움을 느낄 수 있는 곳입니다.")
-                            .category(Category.PLACE) // 관광지
-                            .imageUrl("/images/경복궁.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("서울")
-                            .placeName("신라 호텔")
-                            .description("럭셔리한 서비스와 아름다운 전망을 자랑하는 서울의 대표적인 호텔입니다.")
-                            .category(Category.STAY) // 숙박 시설
-                            .imageUrl("/images/신라호텔.png")
-                            .build(),
-                    Place.builder()
-                            .cityName("서울")
-                            .placeName("스타벅스 더종로점")
-                            .description("탁 트인 전망과 함께 프리미엄 커피를 즐길 수 있는 카페입니다.")
-                            .category(Category.CAFE) // 카페
-                            .imageUrl("/images/스타벅스 더종로점.png")
-                            .build(),
-                    Place.builder()
-                            .cityName("서울")
-                            .placeName("명동교자")
-                            .description("서울에서 가장 유명한 칼국수 맛집 중 하나입니다.")
-                            .category(Category.RESTAURANT) // 식당
-                            .imageUrl("/images/명동교자.png")
-                            .build(),
+            List<Place> places = new ArrayList<>();
 
-                    // 부산
-                    Place.builder()
-                            .cityName("부산")
-                            .placeName("해운대 해수욕장")
-                            .description("부산을 대표하는 해변으로, 여름철에는 많은 관광객이 찾는 명소입니다.")
-                            .category(Category.PLACE) // 관광지
-                            .imageUrl("/images/해운대.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("부산")
-                            .placeName("광안대교 야경")
-                            .description("부산의 야경 명소 중 하나로, 광안리 해변에서 아름다운 전망을 볼 수 있습니다.")
-                            .category(Category.PLACE) // 관광지
-                            .imageUrl("/images/광안대교.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("부산")
-                            .placeName("기장 연화리 카페거리")
-                            .description("바닷가 바로 앞에서 커피를 마실 수 있는 멋진 카페들이 모여 있는 곳입니다.")
-                            .category(Category.CAFE) // 카페
-                            .imageUrl("/images/기장 연화리 카페거리.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("부산")
-                            .placeName("초량밀면")
-                            .description("부산에서 유명한 밀면 맛집으로, 여름철에 특히 인기가 많습니다.")
-                            .category(Category.RESTAURANT) // 식당
-                            .imageUrl("/images/초량밀면.jpg")
-                            .build(),
+            // 서울
+            Place place1 = new Place();
+            place1.setCityName("서울");
+            place1.setPlaceName("경복궁");
+            place1.setDescription("조선 시대의 대표적인 궁궐로, 한국 전통 건축의 아름다움을 느낄 수 있는 곳입니다.");
+            place1.setCategory(Category.PLACE); // 관광지
+            place1.setImageUrl("/images/경복궁.jpg");
+            places.add(place1);
 
-                    // 제주도
-                    Place.builder()
-                            .cityName("제주도")
-                            .placeName("성산일출봉")
-                            .description("유네스코 세계자연유산으로 지정된 제주도의 대표적인 명소입니다.")
-                            .category(Category.PLACE) // 자연 관광지
-                            .imageUrl("/images/성산일출봉.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("제주도")
-                            .placeName("우도")
-                            .description("에메랄드빛 바다와 멋진 해안도로가 있는 작은 섬으로, 제주도의 인기 관광지입니다.")
-                            .category(Category.PLACE) // 관광지
-                            .imageUrl("/images/우도.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("제주도")
-                            .placeName("제주 흑돼지 거리")
-                            .description("제주도에서만 맛볼 수 있는 특색 있는 흑돼지 요리를 즐길 수 있는 곳입니다.")
-                            .category(Category.RESTAURANT) // 식당
-                            .imageUrl("/images/제주 흑돼지 거리.jpg")
-                            .build(),
+            Place place2 = new Place();
+            place2.setCityName("서울");
+            place2.setPlaceName("신라 호텔");
+            place2.setDescription("럭셔리한 서비스와 아름다운 전망을 자랑하는 서울의 대표적인 호텔입니다.");
+            place2.setCategory(Category.STAY); // 숙박 시설
+            place2.setImageUrl("/images/신라호텔.png");
+            places.add(place2);
 
-                    // 강원도 속초
-                    Place.builder()
-                            .cityName("속초")
-                            .placeName("속초 중앙시장")
-                            .description("속초에서 가장 유명한 재래시장으로, 다양한 먹거리를 즐길 수 있습니다.")
-                            .category(Category.ETC) // 기타 명소
-                            .imageUrl("/images/속초중앙시장.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("속초")
-                            .placeName("설악산 국립공원")
-                            .description("대한민국에서 가장 아름다운 산 중 하나로, 사계절 내내 등산객이 찾는 명소입니다.")
-                            .category(Category.PLACE) // 자연 관광지
-                            .imageUrl("/images/설악산.jpg")
-                            .build(),
-                    Place.builder()
-                            .cityName("속초")
-                            .placeName("봉포머구리집")
-                            .description("싱싱한 해산물 요리를 맛볼 수 있는 속초의 대표적인 맛집입니다.")
-                            .category(Category.RESTAURANT) // 식당
-                            .imageUrl("/images/봉포머구리집.png")
-                            .build()
-            );
+            Place place3 = new Place();
+            place3.setCityName("서울");
+            place3.setPlaceName("스타벅스 더종로점");
+            place3.setDescription("탁 트인 전망과 함께 프리미엄 커피를 즐길 수 있는 카페입니다.");
+            place3.setCategory(Category.CAFE); // 카페
+            place3.setImageUrl("/images/스타벅스 더종로점.png");
+            places.add(place3);
+
+            Place place4 = new Place();
+            place4.setCityName("서울");
+            place4.setPlaceName("명동교자");
+            place4.setDescription("서울에서 가장 유명한 칼국수 맛집 중 하나입니다.");
+            place4.setCategory(Category.RESTAURANT); // 식당
+            place4.setImageUrl("/images/명동교자.png");
+            places.add(place4);
+
+            // 부산
+            Place place5 = new Place();
+            place5.setCityName("부산");
+            place5.setPlaceName("해운대 해수욕장");
+            place5.setDescription("부산을 대표하는 해변으로, 여름철에는 많은 관광객이 찾는 명소입니다.");
+            place5.setCategory(Category.PLACE); // 관광지
+            place5.setImageUrl("/images/해운대.jpg");
+            places.add(place5);
+
+            Place place6 = new Place();
+            place6.setCityName("부산");
+            place6.setPlaceName("광안대교 야경");
+            place6.setDescription("부산의 야경 명소 중 하나로, 광안리 해변에서 아름다운 전망을 볼 수 있습니다.");
+            place6.setCategory(Category.PLACE); // 관광지
+            place6.setImageUrl("/images/광안대교.jpg");
+            places.add(place6);
+
+            Place place7 = new Place();
+            place7.setCityName("부산");
+            place7.setPlaceName("기장 연화리 카페거리");
+            place7.setDescription("바닷가 바로 앞에서 커피를 마실 수 있는 멋진 카페들이 모여 있는 곳입니다.");
+            place7.setCategory(Category.CAFE); // 카페
+            place7.setImageUrl("/images/기장 연화리 카페거리.jpg");
+            places.add(place7);
+
+            Place place8 = new Place();
+            place8.setCityName("부산");
+            place8.setPlaceName("초량밀면");
+            place8.setDescription("부산에서 유명한 밀면 맛집으로, 여름철에 특히 인기가 많습니다.");
+            place8.setCategory(Category.RESTAURANT); // 식당
+            place8.setImageUrl("/images/초량밀면.jpg");
+            places.add(place8);
+
+            // 제주도
+            Place place9 = new Place();
+            place9.setCityName("제주도");
+            place9.setPlaceName("성산일출봉");
+            place9.setDescription("유네스코 세계자연유산으로 지정된 제주도의 대표적인 명소입니다.");
+            place9.setCategory(Category.PLACE); // 자연 관광지
+            place9.setImageUrl("/images/성산일출봉.jpg");
+            places.add(place9);
+
+            Place place10 = new Place();
+            place10.setCityName("제주도");
+            place10.setPlaceName("우도");
+            place10.setDescription("에메랄드빛 바다와 멋진 해안도로가 있는 작은 섬으로, 제주도의 인기 관광지입니다.");
+            place10.setCategory(Category.PLACE); // 관광지
+            place10.setImageUrl("/images/우도.jpg");
+            places.add(place10);
+
+            Place place11 = new Place();
+            place11.setCityName("제주도");
+            place11.setPlaceName("제주 흑돼지 거리");
+            place11.setDescription("제주도에서만 맛볼 수 있는 특색 있는 흑돼지 요리를 즐길 수 있는 곳입니다.");
+            place11.setCategory(Category.RESTAURANT); // 식당
+            place11.setImageUrl("/images/제주 흑돼지 거리.jpg");
+            places.add(place11);
+
+            // 강원도 속초
+            Place place12 = new Place();
+            place12.setCityName("속초");
+            place12.setPlaceName("속초 중앙시장");
+            place12.setDescription("속초에서 가장 유명한 재래시장으로, 다양한 먹거리를 즐길 수 있습니다.");
+            place12.setCategory(Category.ETC); // 기타 명소
+            place12.setImageUrl("/images/속초중앙시장.jpg");
+            places.add(place12);
+
+            Place place13 = new Place();
+            place13.setCityName("속초");
+            place13.setPlaceName("설악산 국립공원");
+            place13.setDescription("대한민국에서 가장 아름다운 산 중 하나로, 사계절 내내 등산객이 찾는 명소입니다.");
+            place13.setCategory(Category.PLACE); // 자연 관광지
+            place13.setImageUrl("/images/설악산.jpg");
+            places.add(place13);
+
+            Place place14 = new Place();
+            place14.setCityName("속초");
+            place14.setPlaceName("봉포머구리집");
+            place14.setDescription("싱싱한 해산물 요리를 맛볼 수 있는 속초의 대표적인 맛집입니다.");
+            place14.setCategory(Category.RESTAURANT); // 식당
+            place14.setImageUrl("/images/봉포머구리집.png");
+            places.add(place14);
 
             placeRepository.saveAll(places);
             System.out.println("국내 여행지 12개가 등록되었습니다.");
@@ -381,31 +509,29 @@ public class BaseInitData implements CommandLineRunner {
             );
 
             // 2. 첫 번째 여행 일정 (서울 힐링 여행)
-            TripSchedule tripSchedule1 = TripSchedule.builder()
-                    .member(member)
-                    .title("서울 힐링 여행")
-                    .description("서울에서 고궁과 명소를 둘러보고 맛집 탐방")
-                    .startDate(LocalDate.of(2025, 4, 10))
-                    .endDate(LocalDate.of(2025, 4, 12))
-                    .build();
+            TripSchedule tripSchedule1 = new TripSchedule();
+            tripSchedule1.setMember(member);
+            tripSchedule1.setTitle("서울 힐링 여행");
+            tripSchedule1.setDescription("서울에서 고궁과 명소를 둘러보고 맛집 탐방");
+            tripSchedule1.setStartDate(LocalDate.of(2025, 4, 10));
+            tripSchedule1.setEndDate(LocalDate.of(2025, 4, 12));
             tripScheduleRepository.save(tripSchedule1);
 
             List<TripInformation> tripInformations1 = List.of(
                     createTripInformation(tripSchedule1, 1L, LocalDateTime.of(2025, 4, 10, 9, 0), Transportation.SUBWAY, 3000, "경복궁에서 한복 체험"),
-                    createTripInformation(tripSchedule1, 4L, LocalDateTime.of(2025, 4, 10, 12, 0), Transportation.WALK, 0,"명동교자에서 점심"),
+                    createTripInformation(tripSchedule1, 4L, LocalDateTime.of(2025, 4, 10, 12, 0), Transportation.WALK, 0, "명동교자에서 점심"),
                     createTripInformation(tripSchedule1, 3L, LocalDateTime.of(2025, 4, 10, 16, 0), Transportation.BUS, 2000, "스타벅스 더종로점에서 카페 타임")
             );
             tripInformationRepository.saveAll(tripInformations1);
-            tripInformations1.forEach(tripSchedule1::addTripInfromation);
+            tripInformations1.forEach(tripSchedule1::addTripInformation);
 
             // 3. 두 번째 여행 일정 (부산 바다 여행)
-            TripSchedule tripSchedule2 = TripSchedule.builder()
-                    .member(member)
-                    .title("부산 바다 여행")
-                    .description("부산 해운대와 광안대교 야경을 즐기는 일정")
-                    .startDate(LocalDate.of(2025, 5, 15))
-                    .endDate(LocalDate.of(2025, 5, 17))
-                    .build();
+            TripSchedule tripSchedule2 = new TripSchedule();
+            tripSchedule2.setMember(member);
+            tripSchedule2.setTitle("부산 바다 여행");
+            tripSchedule2.setDescription("부산 해운대와 광안대교 야경을 즐기는 일정");
+            tripSchedule2.setStartDate(LocalDate.of(2025, 5, 15));
+            tripSchedule2.setEndDate(LocalDate.of(2025, 5, 17));
             tripScheduleRepository.save(tripSchedule2);
 
             List<TripInformation> tripInformations2 = List.of(
@@ -414,16 +540,15 @@ public class BaseInitData implements CommandLineRunner {
                     createTripInformation(tripSchedule2, 8L, LocalDateTime.of(2025, 5, 16, 12, 0), Transportation.BUS, 2500, "초량밀면에서 부산 밀면 맛보기")
             );
             tripInformationRepository.saveAll(tripInformations2);
-            tripInformations2.forEach(tripSchedule2::addTripInfromation);
+            tripInformations2.forEach(tripSchedule2::addTripInformation);
 
             // 4. 세 번째 여행 일정 (제주도 탐방)
-            TripSchedule tripSchedule3 = TripSchedule.builder()
-                    .member(member)
-                    .title("제주도 탐방")
-                    .description("제주도의 대표 명소와 맛집을 방문하는 여행")
-                    .startDate(LocalDate.of(2025, 6, 20))
-                    .endDate(LocalDate.of(2025, 6, 23))
-                    .build();
+            TripSchedule tripSchedule3 = new TripSchedule();
+            tripSchedule3.setMember(member);
+            tripSchedule3.setTitle("제주도 탐방");
+            tripSchedule3.setDescription("제주도의 대표 명소와 맛집을 방문하는 여행");
+            tripSchedule3.setStartDate(LocalDate.of(2025, 6, 20));
+            tripSchedule3.setEndDate(LocalDate.of(2025, 6, 23));
             tripScheduleRepository.save(tripSchedule3);
 
             List<TripInformation> tripInformations3 = List.of(
@@ -432,16 +557,15 @@ public class BaseInitData implements CommandLineRunner {
                     createTripInformation(tripSchedule3, 11L, LocalDateTime.of(2025, 6, 21, 18, 30), Transportation.TAXI, 15000, "제주 흑돼지 거리에서 저녁 식사")
             );
             tripInformationRepository.saveAll(tripInformations3);
-            tripInformations3.forEach(tripSchedule3::addTripInfromation);
+            tripInformations3.forEach(tripSchedule3::addTripInformation);
 
             // 5. 네 번째 여행 일정 (속초 먹거리 여행)
-            TripSchedule tripSchedule4 = TripSchedule.builder()
-                    .member(member)
-                    .title("속초 먹거리 여행")
-                    .description("속초에서 재래시장과 해산물 맛집 방문")
-                    .startDate(LocalDate.of(2025, 7, 5))
-                    .endDate(LocalDate.of(2025, 7, 7))
-                    .build();
+            TripSchedule tripSchedule4 = new TripSchedule();
+            tripSchedule4.setMember(member);
+            tripSchedule4.setTitle("속초 먹거리 여행");
+            tripSchedule4.setDescription("속초에서 재래시장과 해산물 맛집 방문");
+            tripSchedule4.setStartDate(LocalDate.of(2025, 7, 5));
+            tripSchedule4.setEndDate(LocalDate.of(2025, 7, 7));
             tripScheduleRepository.save(tripSchedule4);
 
             List<TripInformation> tripInformations4 = List.of(
@@ -450,7 +574,7 @@ public class BaseInitData implements CommandLineRunner {
                     createTripInformation(tripSchedule4, 14L, LocalDateTime.of(2025, 7, 6, 18, 0), Transportation.TAXI, 8000, "봉포머구리집에서 신선한 해산물 맛보기")
             );
             tripInformationRepository.saveAll(tripInformations4);
-            tripInformations4.forEach(tripSchedule4::addTripInfromation);
+            tripInformations4.forEach(tripSchedule4::addTripInformation);
 
             System.out.println("네 개의 여행 일정이 등록되었습니다.");
         } else {
@@ -464,17 +588,16 @@ public class BaseInitData implements CommandLineRunner {
                 () -> new ServiceException("404-2", "해당 장소가 존재하지 않습니다. ID: " + placeId)
         );
 
-        return TripInformation.builder()
-                .tripSchedule(tripSchedule)
-                .place(place)
-                .visitTime(visitTime)
-                .duration(2) // 2시간 머무름
-                .transportation(transportation) // 교통 수단 설정
-                .cost(cost) // 비용 설정
-                .notes(notes) // 방문 목적 및 기타 정보 추가
-                //.priority(priority) // 우선순위 설정
-                .isVisited(false) // 기본값은 방문하지 않음
-                .build();
+        TripInformation tripInformation = new TripInformation();
+        tripInformation.setTripSchedule(tripSchedule);
+        tripInformation.setPlace(place);
+        tripInformation.setVisitTime(visitTime);
+        tripInformation.setDuration(2); // 2시간 머무름
+        tripInformation.setTransportation(transportation); // 교통 수단 설정
+        tripInformation.setCost(cost); // 비용 설정
+        tripInformation.setNotes(notes); // 방문 목적 및 기타 정보 추가
+        tripInformation.setVisited(false); // 기본값은 방문하지 않음
+        return tripInformation;
     }
 
     // 리뷰 데이터 등록

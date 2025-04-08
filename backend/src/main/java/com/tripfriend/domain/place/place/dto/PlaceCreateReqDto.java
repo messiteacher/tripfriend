@@ -31,11 +31,11 @@ public class PlaceCreateReqDto {
 
     // DTO -> Entity 변환
     public Place toEntity(){
-        return Place.builder()
-                .cityName(cityName)
-                .placeName(placeName)
-                .description(description)
-                .category(category)
-                .build();
+        Place place = new Place();
+        place.setCityName(cityName);
+        place.setPlaceName(placeName);
+        place.setDescription(description);
+        place.setCategory(category);
+        return place;
     }
 }

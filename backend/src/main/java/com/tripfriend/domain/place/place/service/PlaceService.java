@@ -37,13 +37,13 @@ public class PlaceService {
             }
         }
 
-        Place place = Place.builder()
-                .cityName(req.getCityName())
-                .placeName(req.getPlaceName())
-                .description(req.getDescription())
-                .category(req.getCategory())
-                .imageUrl(imageUrl)
-                .build();
+        Place place = new Place();
+        place.setCityName(req.getCityName());
+        place.setPlaceName(req.getPlaceName());
+        place.setDescription(req.getDescription());
+        place.setCategory(req.getCategory());
+        place.setImageUrl(imageUrl);
+
         placeRepository.save(place);
         return place;
     }

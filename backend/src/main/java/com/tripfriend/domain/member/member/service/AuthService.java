@@ -39,33 +39,36 @@ public class AuthService {
         }
 
         // 계정이 삭제된 상태인 경우
-        if (member.isDeleted()) {
+        if (member.getDeleted()) {
             // 복구 가능한 경우
             if (member.canBeRestored()) {
                 // 복구 가능한 경우에만 특별한 토큰 발급
-                String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.isVerified(), true);
-                // 리프레시 토큰은 Redis에만 저장하고 클라이언트에게 전달하지 않음
-                jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.isVerified(), true);
+                String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.getVerified(), true);
+                String refreshToken = jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.getVerified(), true);
 
-                // 액세스 토큰만 쿠키에 저장 (10분)
+                // 액세스 토큰과 리프레시 토큰을 쿠키에 저장
                 addCookie(response, "accessToken", accessToken, 10 * 60); // 10분
+                addCookie(response, "refreshToken", refreshToken, 60 * 60 * 24); // 1일
 
-                return new AuthResponseDto(accessToken, true); // 삭제된 계정 상태 표시
+                // 토큰 정보도 응답에 포함
+                return new AuthResponseDto(accessToken, refreshToken, true);
             } else {
                 throw new RuntimeException("영구 삭제된 계정입니다. 새로운 계정으로 가입해주세요.");
             }
         }
 
         // 토큰 생성 (Redis에 저장됨)
-        String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.isVerified());
-        // 리프레시 토큰은 Redis에만 저장하고 클라이언트에게 전달하지 않음
-        jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.isVerified());
+        String accessToken = jwtUtil.generateAccessToken(member.getUsername(), member.getAuthority(), member.getVerified());
+        String refreshToken = jwtUtil.generateRefreshToken(member.getUsername(), member.getAuthority(), member.getVerified());
 
-        // 액세스 토큰만 쿠키에 저장
+        // 액세스 토큰과 리프레시 토큰을 쿠키에 저장
         addCookie(response, "accessToken", accessToken, 30 * 60); // 30분
+        addCookie(response, "refreshToken", refreshToken, 60 * 60 * 24 * 7); // 7일
 
-        return new AuthResponseDto(accessToken); // 리프레시 토큰 없이 반환
+        // 토큰 정보도 응답에 포함
+        return new AuthResponseDto(accessToken, refreshToken, false);
     }
+
 
     // 로그아웃 처리 - Redis 블랙리스트 활용
     public void logout(HttpServletRequest request, HttpServletResponse response) {
@@ -125,17 +128,21 @@ public class AuthService {
             addCookie(response, "accessToken", newAccessToken, 30 * 60); // 30분
         }
 
+        String newRefreshToken = storedRefreshToken;
+
         // 리프레시 토큰 재발급 필요성 확인
         if (isRefreshTokenNeedsRenewal(storedRefreshToken)) {
             if (isDeleted) {
-                jwtUtil.generateRefreshToken(username, authority, isVerified, true);
+                newRefreshToken = jwtUtil.generateRefreshToken(username, authority, isVerified, true);
+                addCookie(response, "refreshToken", newRefreshToken, 60 * 60 * 24); // 1일
             } else {
-                jwtUtil.generateRefreshToken(username, authority, isVerified);
+                newRefreshToken = jwtUtil.generateRefreshToken(username, authority, isVerified);
+                addCookie(response, "refreshToken", newRefreshToken, 60 * 60 * 24 * 7); // 7일
             }
         }
 
-        // AuthResponseDto 반환 (삭제된 계정 여부 포함)
-        return new AuthResponseDto(newAccessToken, isDeleted);
+        // 토큰 정보도 응답에 포함
+        return new AuthResponseDto(newAccessToken, newRefreshToken, isDeleted);
     }
 
     // 리프레시 토큰 갱신 필요 여부 확인

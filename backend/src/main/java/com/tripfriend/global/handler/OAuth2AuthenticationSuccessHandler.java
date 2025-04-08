@@ -30,14 +30,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = jwtUtil.generateAccessToken(
                 member.getUsername(),
                 member.getAuthority(),
-                member.isVerified()  // 사용자 인증 여부 추가
+                member.getVerified()  // 사용자 인증 여부 추가
         );
 
         // JWT 리프레시 토큰 생성
         String refreshToken = jwtUtil.generateRefreshToken(
                 member.getUsername(),
                 member.getAuthority(),
-                member.isVerified()
+                member.getVerified()
         );
 
         addCookie(response, "accessToken", accessToken, 30 * 60); // 30분

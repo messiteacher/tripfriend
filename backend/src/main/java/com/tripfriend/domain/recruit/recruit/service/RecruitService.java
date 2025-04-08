@@ -8,13 +8,12 @@ import com.tripfriend.domain.member.member.service.AuthService;
 import com.tripfriend.domain.place.place.entity.Place;
 import com.tripfriend.domain.place.place.repository.PlaceRepository;
 import com.tripfriend.domain.recruit.apply.dto.ApplyResponseDto;
+import com.tripfriend.domain.recruit.recruit.dto.RecruitDetailResponseDto;
 import com.tripfriend.domain.recruit.recruit.dto.RecruitListResponseDto;
 import com.tripfriend.domain.recruit.recruit.dto.RecruitRequestDto;
-import com.tripfriend.domain.recruit.recruit.dto.RecruitDetailResponseDto;
 import com.tripfriend.domain.recruit.recruit.entity.Recruit;
 import com.tripfriend.domain.recruit.recruit.repository.RecruitRepository;
 import com.tripfriend.global.exception.ServiceException;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +54,7 @@ public class RecruitService {
         List<ApplyResponseDto> applies = recruit.getApplies().stream()
                 .map(ApplyResponseDto::new)
                 .toList();
-        return new RecruitDetailResponseDto(recruit, applies);
+        return RecruitDetailResponseDto.Companion.fromWithApplies(recruit, applies);
     }
 
     @Transactional
@@ -63,7 +62,7 @@ public class RecruitService {
         Member member = getLoggedInMember(token);
         Place place = placeRepository.findById(requestDto.getPlaceId()).orElseThrow(() -> new ServiceException("404-2", "해당 장소가 존재하지 않습니다."));
 
-        return new RecruitDetailResponseDto(recruitRepository.save(requestDto.toEntity(member, place)));
+        return RecruitDetailResponseDto.Companion.from(recruitRepository.save(requestDto.toEntity(member, place)));
     }
 
     @Transactional
@@ -150,7 +149,7 @@ public class RecruitService {
         }
 
         recruit.update(requestDto, place);
-        return new RecruitDetailResponseDto(recruit); // recruitRepository.save(recruit) 불필요!
+        return RecruitDetailResponseDto.Companion.from(recruit); // recruitRepository.save(recruit) 불필요!
     }
 
     public void delete(Long recruitId, String token) {

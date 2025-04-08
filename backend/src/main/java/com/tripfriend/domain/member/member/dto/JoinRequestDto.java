@@ -44,18 +44,22 @@ public class JoinRequestDto {
     private String aboutMe;
 
     public Member toEntity() {
-        return Member.builder()
-                .username(username)
-                .email(email)
-                .password(password)
-                .nickname(nickname)
-                .profileImage(profileImage)
-                .gender(gender)
-                .ageRange(ageRange)
-                .travelStyle(travelStyle)
-                .aboutMe(aboutMe)
-                .rating(0.0)
-                .authority("USER")
-                .build();
+
+        Member member = new Member();
+
+        member.setUsername(username);
+        member.setEmail(email);
+        member.setPassword(password);
+        member.setNickname(nickname);
+        member.setProfileImage(profileImage);
+        member.setGender(gender);
+        member.setAgeRange(ageRange);
+        member.setTravelStyle(travelStyle);
+        member.setAboutMe(aboutMe);
+        member.setRating(0.0);
+        member.setAuthority("USER");
+        member.setVerified(false);
+
+        return member;
     }
 }

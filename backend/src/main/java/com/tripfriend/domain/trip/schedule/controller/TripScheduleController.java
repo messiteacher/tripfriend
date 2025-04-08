@@ -27,8 +27,6 @@ import java.util.List;
 public class TripScheduleController {
 
     private final TripScheduleService scheduleService;
-    private final AuthService authService;
-
 
     // 개인 일정 생성
     @PostMapping

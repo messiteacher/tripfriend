@@ -39,7 +39,7 @@ public class EmailVerifiedFilter extends OncePerRequestFilter {
                     .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
             // 검증되지 않은 사용자인 경우 처리
-            if (!member.isVerified()) {
+            if (!member.getVerified()) {
 
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.setContentType("application/json");

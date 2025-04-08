@@ -85,13 +85,14 @@ public class TripScheduleService {
 
     // 여행 일정을 생성하고 DB에 저장
     private TripSchedule createAndSaveSchedule(Member member, TripScheduleReqDto req) {
-        TripSchedule schedule = TripSchedule.builder()
-                .member(member)
-                .title(req.getTitle())
-                .description(req.getDescription())
-                .startDate(req.getStartDate())
-                .endDate(req.getEndDate())
-                .build();
+
+        TripSchedule schedule = new TripSchedule();
+        schedule.setMember(member);
+        schedule.setTitle(req.getTitle());
+        schedule.setDescription(req.getDescription());
+        schedule.setStartDate(req.getStartDate());
+        schedule.setEndDate(req.getEndDate());
+
         tripScheduleRepository.save(schedule);
         return schedule;
     }

@@ -172,7 +172,7 @@ public class MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
         // deleted 필드가 있다고 가정
-        return member.isDeleted();
+        return member.getDeleted();
     }
 
     @Transactional

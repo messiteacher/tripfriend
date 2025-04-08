@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 interface Place {
   id: number;
@@ -12,6 +11,15 @@ interface Place {
   category: string;
   imageUrl: string;
 }
+
+// 영어 카테고리 -> 한글 매핑 객체
+const categoryMapping: Record<string, string> = {
+  PLACE: "장소",
+  STAY: "숙박",
+  RESTAURANT: "식당",
+  CAFE: "카페",
+  ETC: "기타",
+};
 
 export default function PlaceDetailPage() {
   const { id } = useParams(); // URL에서 id 가져오기
@@ -58,7 +66,9 @@ export default function PlaceDetailPage() {
       />
       <p className="mt-4 text-gray-700">{place.description}</p>
       <p className="mt-2 text-sm text-gray-500">도시: {place.cityName}</p>
-      <p className="mt-2 text-sm text-gray-500">카테고리: {place.category}</p>
+      <p className="mt-2 text-sm text-gray-500">
+        카테고리: {categoryMapping[place.category] || place.category}
+      </p>
     </div>
   );
 }
