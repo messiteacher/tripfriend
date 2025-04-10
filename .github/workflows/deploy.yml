@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main  # main 브랜치에 푸시될 때마다 실행
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -62,20 +63,25 @@ jobs:
             # 환경 파일을 위한 디렉토리 생성
             mkdir -p ~/tripfriend/backend
             mkdir -p ~/tripfriend/frontend
+            mkdir -p ~/tripfriend/redis
             
             # 환경 파일 생성
             echo "${{ secrets.BACKEND_ENV }}" > ~/tripfriend/backend/.env
             echo "${{ secrets.FRONTEND_ENV }}" > ~/tripfriend/frontend/.env.local
             
-            # 최신 Docker 이미지 다운로드
+            # Redis 컨테이너 실행
+            docker pull redis:latest
+            docker run -d --name redis -p 6379:6379 redis:latest
+            
+            # 최신 Docker 이미지 다운로드 (백엔드, 프론트엔드)
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend:latest
             
             # 기존 컨테이너가 있다면 중지 및 제거
-            docker stop frontend backend || true
-            docker rm frontend backend || true
+            docker stop frontend backend redis || true
+            docker rm frontend backend redis || true
             
-            # 새 컨테이너 실행
+            # 새 컨테이너 실행 (프론트엔드, 백엔드)
             docker run -d --name frontend -p 3000:3000 \
               --env-file ~/tripfriend/frontend/.env.local \
               ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend:latest
