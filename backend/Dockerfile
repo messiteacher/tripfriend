@@ -1,10 +1,9 @@
-# JDK 이미지 기반
-FROM eclipse-temurin:17-jdk-alpine
+FROM openjdk:17-jdk-slim
 
-# JAR 파일을 복사
-ARG JAR_FILE=build/libs/*.jar
-COPY ${JAR_FILE} app.jar
+WORKDIR /app
 
-# 실행
+COPY ./build/libs/*.jar app.jar
+
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

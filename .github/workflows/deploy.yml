@@ -2,24 +2,93 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main  # main 브랜치에 푸시될 때마다 실행
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
+      # 레포지토리 코드 체크아웃
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: SSH & Deploy
-        uses: appleboy/ssh-action@master
+      # Docker Buildx 설정
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # DockerHub 로그인
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Docker 이미지 빌드 및 푸시 (프론트)
+      - name: Build and push frontend
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend ./frontend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend
+
+      # Docker 이미지 빌드 및 푸시 (백엔드)
+      - name: Build and push backend
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend ./backend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend
+
+      # 프론트엔드 .env.local 파일 생성
+      - name: 프론트엔드 .env.local 생성
+        run: |
+          echo "${{ secrets.FRONTEND_ENV }}" > ./frontend/.env.local
+
+      # 백엔드 .env 파일 생성
+      - name: 백엔드 .env 생성
+        run: |
+          echo "${{ secrets.BACKEND_ENV }}" > ./backend/.env
+
+      # EC2에 SSH 접속하여 리포지토리 클론 및 Docker 컨테이너 실행
+      - name: SSH to EC2 and deploy
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_IP }}  # EC2 IP
+          username: ${{ secrets.EC2_USER }}  # EC2 사용자 (예: ubuntu)
+          key: ${{ secrets.EC2_SSH_KEY }}  # EC2 비공개 키
           script: |
-            cd /home/ubuntu/tripfriend
+            # EC2에 Git 설치 (이미 설치된 경우 이 부분은 생략 가능)
+            sudo apt update
+            sudo apt install git -y
+
+            # 기존 디렉토리가 있으면 삭제 후 새로 클론
+            cd ~
+            rm -rf tripfriend || true  # 기존 클론된 리포지토리가 있으면 삭제
+            git clone https://github.com/messiteacher/tripfriend.git
+
+            # 리포지토리 디렉토리로 이동
+            cd tripfriend
+
+            # 최신 main 브랜치로 pull
+            git checkout main
             git pull origin main
-            chmod +x deploy.sh
-            ./deploy.sh
+
+            # 백엔드 .env 파일 생성 (EC2 서버에서 실행)
+            echo "${{ secrets.BACKEND_ENV }}" > ./backend/.env
+
+            # 프론트엔드 .env.local 파일 생성 (EC2 서버에서 실행)
+            echo "${{ secrets.FRONTEND_ENV }}" > ./frontend/.env.local
+
+            # Docker 이미지를 빌드하고 컨테이너 실행 (프론트엔드와 백엔드)
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend
+
+            # 기존 컨테이너 삭제
+            docker stop frontend || true
+            docker stop backend || true
+            docker rm frontend || true
+            docker rm backend || true
+
+            # 새 컨테이너 실행
+            docker run -d --name frontend -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend
+            docker run -d --name backend -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend
+
+            # Nginx 리로드 (서브도메인 리버스 프록시 적용)
+            sudo nginx -s reload
