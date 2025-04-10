@@ -19,7 +19,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/ubuntu/tripfreind
+            cd /home/ubuntu/tripfriend
             git pull origin main
             chmod +x deploy.sh
             ./deploy.sh
