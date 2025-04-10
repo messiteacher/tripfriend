@@ -71,29 +71,34 @@ jobs:
             # 최신 Docker 이미지 다운로드
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend:latest
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend:latest
-      
-            # Redis 이미지 다운로드
             docker pull redis:latest
-      
+
             # 기존 컨테이너가 있다면 중지 및 제거
             docker stop frontend backend redis || true
             docker rm frontend backend redis || true
-      
+  
+            # Docker 네트워크 생성 (없는 경우)
+            docker network inspect tripfriend-network >/dev/null 2>&1 || \
+            docker network create tripfriend-network
+  
             # Redis 컨테이너 실행
-            docker run -d --name redis -p 6379:6379 redis:latest
-      
-            # 새 컨테이너 실행 (백엔드에 Redis 연결)
+            docker run -d --name redis \
+              --network tripfriend-network \
+              redis:latest
+  
+            # 새 컨테이너 실행 (공통 네트워크에 연결)
+            docker run -d --name backend -p 8080:8080 \
+              --network tripfriend-network \
+              --env-file ~/tripfriend/backend/.env \
+              ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend:latest
+  
             docker run -d --name frontend -p 3000:3000 \
+              --network tripfriend-network \
               --env-file ~/tripfriend/frontend/.env.local \
               ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend:latest
-      
-            docker run -d --name backend -p 8080:8080 \
-              --env-file ~/tripfriend/backend/.env \
-              --link redis:redis \
-              ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend:latest
-      
+  
             # 컨테이너 실행 상태 확인
             docker ps
-      
+  
             # Nginx 리로드 (필요한 경우)
             sudo nginx -s reload || true
