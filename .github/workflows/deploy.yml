@@ -31,6 +31,13 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend
 
       # Docker 이미지 빌드 및 푸시 (백엔드)
+      - name: Build backend with Gradle
+        run: |
+          cd ./backend
+          ./gradlew clean build -x test
+          cd ..
+
+      # Docker 이미지 빌드 및 푸시 (백엔드)
       - name: Build and push backend
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend ./backend
