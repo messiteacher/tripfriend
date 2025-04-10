@@ -101,5 +101,3 @@
 [Commit Convention](https://github.com/prgrms-be-devcourse/NBE4-5-2-Team10/wiki/Code-Convention)
 <br/>
 [Code Convention](https://github.com/prgrms-be-devcourse/NBE4-5-2-Team10/wiki/Git-Commit-Convention)
-
-
