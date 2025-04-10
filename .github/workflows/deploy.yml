@@ -68,6 +68,9 @@ jobs:
           host: ${{ secrets.EC2_IP }}  # EC2 IP
           username: ${{ secrets.EC2_USER }}  # EC2 사용자 (예: ubuntu)
           key: ${{ secrets.EC2_SSH_KEY }}  # EC2 비공개 키
+          port: 22
+          debug: true
+          script_stop: true
           script: |
             # EC2에 Git 설치 (이미 설치된 경우 이 부분은 생략 가능)
             sudo apt update
