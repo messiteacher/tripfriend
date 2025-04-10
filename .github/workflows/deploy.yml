@@ -63,50 +63,50 @@ jobs:
 
       # EC2에 SSH 접속하여 리포지토리 클론 및 Docker 컨테이너 실행
       - name: SSH to EC2 and deploy
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.EC2_IP }}  # EC2 IP
-          username: ${{ secrets.EC2_USER }}  # EC2 사용자 (예: ubuntu)
-          key: ${{ secrets.EC2_SSH_KEY }}  # EC2 비공개 키
-          port: 22
-          debug: true
-          script_stop: true
-          script: |
-            # EC2에 Git 설치 (이미 설치된 경우 이 부분은 생략 가능)
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > tripfriend.pem
+          chmod 600 tripfriend.pem
+          ssh -o StrictHostKeyChecking=no -i tripfriend.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_IP }} '
+            # EC2에 Git 설치
             sudo apt update
             sudo apt install git -y
-
+      
             # 기존 디렉토리가 있으면 삭제 후 새로 클론
             cd ~
-            rm -rf tripfriend || true  # 기존 클론된 리포지토리가 있으면 삭제
-            git clone https://github.com/messiteacher/tripfriend.git
-
+            rm -rf tripfriend || true
+            git clone https://github.com/***/tripfriend.git
+      
             # 리포지토리 디렉토리로 이동
             cd tripfriend
-
+      
             # 최신 main 브랜치로 pull
             git checkout main
             git pull origin main
-
-            # 백엔드 .env 파일 생성 (EC2 서버에서 실행)
-            echo "${{ secrets.BACKEND_ENV }}" > ./backend/.env
-
-            # 프론트엔드 .env.local 파일 생성 (EC2 서버에서 실행)
-            echo "${{ secrets.FRONTEND_ENV }}" > ./frontend/.env.local
-
-            # Docker 이미지를 빌드하고 컨테이너 실행 (프론트엔드와 백엔드)
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend
-
+      
+            # 백엔드 .env 파일 생성
+            echo "내용1
+            내용2
+            내용3
+            ..." > ./backend/.env
+      
+            # 프론트엔드 .env.local 파일 생성
+            echo "키=값" > ./frontend/.env.local
+      
+            # Docker 이미지를 빌드하고 컨테이너 실행
+            docker pull ***/tripfriend-frontend
+            docker pull ***/tripfriend-backend
+      
             # 기존 컨테이너 삭제
             docker stop frontend || true
             docker stop backend || true
             docker rm frontend || true
             docker rm backend || true
-
+      
             # 새 컨테이너 실행
-            docker run -d --name frontend -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-frontend
-            docker run -d --name backend -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/tripfriend-backend
-
-            # Nginx 리로드 (서브도메인 리버스 프록시 적용)
+            docker run -d --name frontend -p 3000:3000 ***/tripfriend-frontend
+            docker run -d --name backend -p 8080:8080 ***/tripfriend-backend
+      
+            # Nginx 리로드
             sudo nginx -s reload
+          '
+          rm tripfriend.pem
