@@ -65,3 +65,16 @@ custom:
 
 file:
   upload-dir: src/main/resources/static/images
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    region:
+      static: ap-northeast-2  # 서울 리전 (필요에 따라 변경)
+    s3:
+      bucket: tripfriend
+      base-url: ${S3_BASE_URL}
+    stack:
+      auto: false
